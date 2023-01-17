@@ -21,14 +21,14 @@ function HomePage() {
 
   const [page, setPage] = useState(1);
 
-  const [count, setCount] = useState(1) ;
+  const [count, setCount] = useState(1);
 
   useEffect(() => {
     setLoading(true);
     characters
       .getAll({ page })
       .then((r) => {
-        setCount(r.data.info.pages)
+        setCount(r.data.info.pages);
         setAllCharacters(r.data.results);
         setTimeout(() => setLoading(false), 1000);
       })
@@ -69,6 +69,7 @@ function HomePage() {
                       name={character.name}
                       species={character.species}
                       status={character.status}
+                      id={character.id}
                     />
                   </Grid>
                 ))}
