@@ -7,8 +7,10 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { addToCart } from "../../redux/slices";
 
 type CardProps = {
   id: number;
@@ -26,6 +28,25 @@ export const CardComponent: FC<CardProps> = ({
   status,
 }) => {
   let navigate = useNavigate();
+  const [disabledBtn, setDisabledBtn] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  const itemExist = useAppSelector((state) => state.cartReducer);
+
+  useEffect(() => {
+    itemExist.some((item) => item.id === id);
+    setDisabledBtn(itemExist.some((item) => item.id === id));
+  }, [itemExist, id]);
+
+  const handleAddToCart = () => {
+    dispatch(
+      addToCart({
+        id,
+        name,
+        image,
+        info: status,
+      })
+    );
+  };
 
   return (
     <Card sx={{ maxWidth: 345 }}>
@@ -46,6 +67,15 @@ export const CardComponent: FC<CardProps> = ({
           onClick={() => navigate(`/character/${id}`)}
         >
           Learn More
+        </Button>
+        <Button
+          fullWidth
+          variant="outlined"
+          size="small"
+          disabled={disabledBtn}
+          onClick={handleAddToCart}
+        >
+          Add to cart
         </Button>
       </CardActions>
     </Card>
