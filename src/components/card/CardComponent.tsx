@@ -1,3 +1,4 @@
+import { SettingsOverscan } from "@mui/icons-material";
 import {
   Button,
   Card,
@@ -11,6 +12,7 @@ import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addToCart } from "../../redux/slices";
+import { setItem } from "../../utils/localStorage";
 
 type CardProps = {
   id: number;
@@ -33,8 +35,8 @@ export const CardComponent: FC<CardProps> = ({
   const itemExist = useAppSelector((state) => state.cartReducer);
 
   useEffect(() => {
-    itemExist.some((item) => item.id === id);
     setDisabledBtn(itemExist.some((item) => item.id === id));
+    setItem("cart", itemExist);
   }, [itemExist, id]);
 
   const handleAddToCart = () => {

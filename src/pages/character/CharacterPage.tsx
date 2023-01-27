@@ -7,12 +7,12 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { characters } from "../../api/characters";
 import { ICharacter } from "./interface/character.interface";
 
-export const CharacterPage = () => {
+const CharacterPage: FC = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState<boolean>(true);
   const [character, setCharacter] = useState<ICharacter | null>(null);
@@ -25,7 +25,7 @@ export const CharacterPage = () => {
         setLoading(false);
       })
       .catch((err) => console.error(err));
-  }, []);
+  }, [id]);
 
   return (
     <>
@@ -52,6 +52,7 @@ export const CharacterPage = () => {
               <Grid item xs={6}>
                 <img
                   src={character!.image}
+                  alt={character!.name}
                   style={{ width: "100%", borderRadius: "0.5em" }}
                 />
               </Grid>
@@ -62,3 +63,5 @@ export const CharacterPage = () => {
     </>
   );
 };
+
+export default CharacterPage;

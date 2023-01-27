@@ -1,9 +1,6 @@
 import { Route, Routes } from "react-router-dom";
-import CharacterPage from "../pages/character/CharacterPage";
-import HomePage from "../pages/home/HomePage";
-import LoginPage from "../pages/login/LoginPage";
 import { Layout } from "../shared";
-
+import { HomePage, LoginPage, CharacterPage } from "../pages";
 function Router() {
   return (
     <Routes>

@@ -2,12 +2,15 @@ import "./App.css";
 import { BrowserRouter } from "react-router-dom";
 import Router from "./router/Router";
 import { NotificationProvider } from "./context/NotificationProvider";
+import { Suspense } from "react";
 
 function App() {
   return (
     <NotificationProvider>
       <BrowserRouter>
-        <Router />
+        <Suspense fallback={"Cargando..."}>
+          <Router />
+        </Suspense>
       </BrowserRouter>
     </NotificationProvider>
   );

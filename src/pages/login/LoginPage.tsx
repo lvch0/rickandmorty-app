@@ -7,36 +7,28 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FC, FormEvent, useState } from "react";
 import { useNotification } from "../../context/NotificationProvider";
 import { LoginValidate } from "../../utils/validateForm";
+import { useFormik } from "formik";
 
 type LoginType = {
   username: string;
   password: string;
 };
 
-function LoginPage() {
-  const { getError, getSuccess } = useNotification();
-  const [loginData, setLoginData] = useState<LoginType>({
-    username: "",
-    password: "",
+const LoginPage: FC<{}> = () => {
+  const { getSuccess } = useNotification();
+  const formik = useFormik<LoginType>({
+    initialValues: {
+      username: "",
+      password: "",
+    },
+    validationSchema: LoginValidate,
+    onSubmit: (values: LoginType) => {
+      getSuccess(JSON.stringify(values))
+    }
   });
-
-  const dataLogin = (e: ChangeEvent<HTMLInputElement>) => {
-    setLoginData({ ...loginData, [e.target.value]: e.target.value });
-  };
-
-  const handleSubmit = (e: FormEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    LoginValidate.validate(loginData)
-      .then(() => {
-        getSuccess(JSON.stringify(loginData));
-      })
-      .catch((error) => {
-        getError(error.message);
-      });
-  };
 
   return (
     <Container maxWidth="sm">
@@ -50,7 +42,7 @@ function LoginPage() {
         <Grid item>
           <Paper sx={{ padding: "1.2em", borderRadius: "0.5em" }}>
             <Typography variant="h4">Iniciar Sesión</Typography>
-            <Box component="form" onSubmit={handleSubmit}>
+            <Box component="form" onSubmit={formik.handleSubmit}>
               <TextField
                 name="username"
                 type="text"
@@ -59,7 +51,12 @@ function LoginPage() {
                 fullWidth
                 label="Email"
                 sx={{ mt: 2, mb: 1.5 }}
-                onChange={dataLogin}
+                value={formik.values.username}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.username && Boolean(formik.errors.username)
+                }
+                helperText={formik.touched.username && formik.errors.username}
               />
               <TextField
                 name="password"
@@ -69,7 +66,12 @@ function LoginPage() {
                 fullWidth
                 label="Contraseña"
                 sx={{ mt: 1.5, mb: 1.5 }}
-                onChange={dataLogin}
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.password && Boolean(formik.errors.password)
+                }
+                helperText={formik.touched.password && formik.errors.password}
               />
               <Button
                 fullWidth
@@ -85,5 +87,6 @@ function LoginPage() {
       </Grid>
     </Container>
   );
-}
+};
+
 export default LoginPage;
