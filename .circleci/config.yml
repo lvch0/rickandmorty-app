@@ -9,7 +9,7 @@ jobs:
       - checkout
       - run:
           name: Update or install PNPM
-          command: 'sudo pnpm install -g pnpm'
+          command: 'sudo npm install -g pnpm'
       - restore_cache:
           key: app-{{ checksum "pnpm-lock.yaml" }}
       - run:
